@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="/logo.svg?sanitize=true" width="40%" />
+  <a href='https://yaireo.github.io/tagify'><img src="/docs/readme-header.svg" width="320" height="160"><a/>
   <br><br>
   <a href='https://yaireo.github.io/tagify'>Tagify</a> - <em>tags</em> input component
 </h1>
@@ -25,81 +25,105 @@
   <img src="https://img.shields.io/bundlephobia/minzip/@yaireo/tagify" />
   <img src="https://img.shields.io/npm/dw/@yaireo/tagify" />
 </p>
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yairEO/tagify/master/mix3.gif" />
-  <img src="https://raw.githubusercontent.com/yairEO/tagify/master/demo.gif" />
+  <img src="/docs/mix3.gif?sanitize=true" />
+  <img src="/docs/demo.gif?sanitize=true" />
 </p>
-
-
-
-
 
 ## Table of Contents
 
 <!--ts-->
-   * [Installation](#installation)
-   * [Selling points](#selling-points)
-   * [What can Tagify do](#what-can-tagify-do)
-   * [Building the project](#building-the-project)
-   * [Adding tags dynamically](#adding-tags-dynamically)
-   * [Ajax whitelist](#ajax-whitelist)
-   * [Edit tags](#edit-tags)
-   * [DOM Templates](#dom-templates)
-   * [Suggestions selectbox](#suggestions-selectbox)
-   * [React wrapper](#react)
-   * [Angular wrapper](#angular)
-   * [Vue Example](https://medium.com/@krishnadeepuv/tagify-with-vue-234cdb03abd3)
-   * [jQuery version](#jquery-version)
-   * [FAQ](#FAQ)
-   * [Methods](#methods)
-   * [Events](#events)
-   * [Settings](#settings)
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+  - [Option 1 - import from CDN:](#option-1---import-from-cdn)
+  - [option 2 - import as a *Node module*:](#option-2---import-as-a-node-module)
+    - [Usage (in your bundle):](#usage-in-your-bundle)
+- [Features](#features)
+- [Building the project](#building-the-project)
+- [Adding tags dynamically](#adding-tags-dynamically)
+- [Output value](#output-value)
+  - [Modify original input value format](#modify-original-input-value-format)
+- [Ajax whitelist](#ajax-whitelist)
+- [Edit tags](#edit-tags)
+- [Drag & Sort](#drag--sort)
+  - [Integration example:](#integration-example)
+- [DOM Templates](#dom-templates)
+  - [Example of overriding the `tag` template:](#example-of-overriding-the-tag-template)
+- [Suggestions list](#suggestions-list)
+  - [Example for a suggestion item alias](#example-for-a-suggestion-item-alias)
+  - [Example whitelist:](#example-whitelist)
+- [Mixed-Content](#mixed-content)
+- [Single-Value](#single-value)
+- [React](#react)
+  - [Update regarding `onChange` prop:](#update-regarding-onchange-prop)
+    - [Updating the component's state](#updating-the-components-state)
+- [jQuery version](#jquery-version)
+- [CSS Variables](#css-variables)
+  - [Full list of Tagify's SCSS variables](#full-list-of-tagifys-scss-variables)
+- [Methods](#methods)
+- [Events](#events)
+- [Hooks](#hooks)
+- [Settings](#settings)
 <!--te-->
 
 ## Installation
 
-    npm i @yaireo/tagify --save
+### Option 1 - import from CDN:
 
-### usage (in your bundle):
+Place these lines before any other code which is (or will be) using *Tagify* ([Example here](https://jsbin.com/jekuqap/edit?html))
+```html
+<script src="https://unpkg.com/@yaireo/tagify"></script>
+<script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+```
 
-    import Tagify from '@yaireo/tagify'
+`Tagify` will then be available globally.
+To load specific version use `@` - for example: `unpkg.com/@yaireo/tagify@3.1.0`
 
-    var tagify = new Tagify(...)
+### option 2 - import as a *Node module*:
+```sh
+npm i @yaireo/tagify --save
+```
 
-> Don't forget to include `tagify.css` file in your project.
+#### Usage (in your bundle):
+
+[live demo using Parcel as bundler](https://codesandbox.io/s/simple-tagify-setup-6pfi2)
+
+```js
+import Tagify from '@yaireo/tagify'
+
+var tagify = new Tagify(...)
+```
+
+> Don't forget to **include `tagify.css`** file in your project.
 > CSS location: `@yaireo/tagify/dist/tagify.css`
 > SCSS location: `@yaireo/tagify/src/tagify.scss`
 > [See SCSS usecase & example](https://github.com/yairEO/tagify/pull/282)
 
-## Selling points
-* JS minified `~30kb` (`~9kb` GZIP)
-* CSS minified `~8kb` (`~2kb` GZIP) - generated from SCSS with variables
-* Easily customized, plenty of settings for common scenarios
-* Your input/textarea node values kept in sync with Tagify
-* ARIA accessibility support
-* Many useful custom [events](#events)
-* Easily change direction to RTL (via the SCSS file)
-* Internet Explorer - A polyfill script can be used: `tagify.polyfills.min.js` in `/dist`
-
-## What can Tagify do
+## Features
 * Can be applied on input & textarea elements
 * Supports [mix content](#mixed-content) (text and tags together)
 * Supports [single-value](#single-value) mode (like `<select>`)
-* Supports whitelist
-* Supports blacklists
-* Supports Templates for customized markup: <em>wrapper</em>, <em>tag item<em> & </em>suggestion item</em>
-* Shows suggestions selectbox (flexiable settings & styling) at full width or next to the typed texted (caret)
+* Supports whitelist/blacklist
+* Supports Templates for: <em>component wrapper</em>, <em>tag items</em>, <em>suggestion list</em> & <em>suggestion items</em>
+* Shows suggestions list (flexiable settings & styling) at *full (component) width* or *next to* the typed texted (caret)
 * Allows setting suggestions' [aliases](#example-for-a-suggestion-item-alias) for easier fuzzy-searching
 * Auto-suggest input as-you-type with ability to auto-complete
 * Can paste in multiple values: `tag 1, tag 2, tag 3` or even newline-separated tags
 * Tags can be created by Regex delimiter or by pressing the "Enter" key / focusing of the input
-* Validate tags by Regex pattern
-* Tags are [editable](#edit-tags)
+* Validate tags by Regex *pattern* or by function
+* Tags may be [editable](#edit-tags) (double-click)
+* <del>ARIA accessibility support</del>(Component too generic for any meaningful ARIA)
 * Supports read-only mode to the whole componenet or per-tag
 * Each tag can have any properties desired (class, data-whatever, readonly...)
 * Automatically disallow duplicate tags (vis "settings" object)
 * Has built-in CSS loader, if needed (Ex. <em>AJAX</em> whitelist pulling)
 * Tags can be trimmed via `hellip` by giving `max-width` to the `tag` element in your `CSS`
+* Easily change direction to RTL (via the SCSS file)
+* Internet Explorer - A polyfill script should be used: `tagify.polyfills.min.js` (in `/dist`)
+* Many useful custom [events](#events)
+* Original input/textarea element values kept in sync with Tagify
 
 ## Building the project
 Simply run `gulp` in your terminal, from the project's path ([Gulp](https://gulpjs.com) should be installed first).
@@ -121,11 +145,50 @@ tagify.addTags(["banana", "orange", "apple"])
 tagify.addTags([{value:"banana", color:"yellow"}, {value:"apple", color:"red"}, {value:"watermelon", color:"green"}])
 ```
 
-## output value
+## Output value
 There are two possible ways to get the value of the tags:
 
 1. Access the tagify's instance's `value` prop: `tagify.value` (Array of tags)
-2. Access the original input's value: `inputElm.value` (Stringified Array of tags)
+2. Access the *original* input's value: `inputElm.value` (Stringified Array of tags)
+
+The most common way is to simply listen to the `change` event on the *original input*
+
+```javascript
+var inputElm = document.querySelector,
+    tagify = new Tagify (inputElm);
+
+inputElm.addEventListener('change', onChange)
+
+function onChange(e){
+  // outputs a String
+  console.log(e.target.value)
+}
+
+```
+
+### [Modify original input value format](https://jsbin.com/paxijaj/edit?html,js,output)
+
+Default format is a JSON string:<br>
+`'[{"value":"cat"}, {"value":"dog"}]'`
+
+I **recommend** keeping this because some situations might have values such as addresses (tags contain commas):<br>
+`'[{"value":"Apt. 2A, Jacksonville, FL 39404"}, {"value":"Forrest Ray, 191-103 Integer Rd., Corona New Mexico"}]'`
+
+Another example for complex tags state might be disabled tags, or ones with custom identifier *class*:<br>
+*(tags can be clicked, so delevopers can choose to use this to disable/enable tags)*<br>
+`'[{"value":"cat", "disabled":true}, {"value":"dog"}, {"value":"bird", "class":"color-green"}]'`
+
+To change the format, assuming your tags have no commas and are fairly simple:
+
+```js
+var tagify = new Tagify(inputElm, {
+  originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+})
+```
+
+**Output:**<br>
+`"cat,dog"`
+
 
 ## Ajax whitelist
 Dynamically-loaded suggestions list (*whitelist*) from the server (as the user types) is a frequent need to many.
@@ -147,22 +210,21 @@ var input = document.querySelector('input'),
 tagify.on('input', onInput)
 
 function onInput( e ){
-  var value = e.detail.value;
-  tagify.settings.whitelist.length = 0; // reset the whitelist
+  var value = e.detail.value
+  tagify.whitelist = null // reset the whitelist
 
   // https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
-  controller && controller.abort();
-  controller = new AbortController();
+  controller && controller.abort()
+  controller = new AbortController()
 
   // show loading animation and hide the suggestions dropdown
-  tagify.loading(true).dropdown.hide.call(tagify)
+  tagify.loading(true).dropdown.hide()
 
   fetch('http://get_suggestions.com?value=' + value, {signal:controller.signal})
     .then(RES => RES.json())
-    .then(function(whitelist){
-      // update inwhitelist Array in-place
-      tagify.settings.whitelist.splice(0, whitelist.length, ...whitelist)
-      tagify.loading(false).dropdown.show.call(tagify, value); // render the suggestions dropdown
+    .then(function(newWhitelist){
+      tagify.whitelist = newWhitelist // update inwhitelist Array in-place
+      tagify.loading(false).dropdown.show(value) // render the suggestions dropdown
     })
 }
 ```
@@ -178,109 +240,124 @@ The value is saved on `blur` or by pressing `enter` key. Pressing `Escape` will 
 To prevent *all* tags from being allowed to be editable, set the `editTags` setting to `false` (or `null`).<br>
 To do the same but for specific tag(s), set those tags' data with `editable` property set to `false`:
 
-```
+```html
 <input value='[{"value":"foo", "editable":false}, {"value":"bar"}]'>
 ```
 
-## DOM Templates
-It's possible to control the templates for the following HTML elements tagify generates by
-modying the `settings.templates` Object with your own custom functions which should output a string.
+## Drag & Sort
 
-<details>
-  <summary><strong>Default templates</strong></summary>
+To be able to sort tags by draging, a 3rd-party script is needed.
 
-```javascript
-templates : {
-  wrapper(input, settings){
-    return `<tags class="tagify ${settings.mode ? "tagify--" + settings.mode : ""} ${input.className}"
-                        ${settings.readonly ? 'readonly aria-readonly="true"' : 'aria-haspopup="listbox" aria-expanded="false"'}
-                        role="tagslist"
-                        tabIndex="-1">
-                <span contenteditable data-placeholder="${settings.placeholder || '&#8203;'}" aria-placeholder="${settings.placeholder || ''}"
-                    class="tagify__input"
-                    role="textbox"
-                    aria-controls="dropdown"
-                    aria-autocomplete="both"
-                    aria-multiline="${settings.mode=='mix'?true:false}"></span>
-            </tags>`
-  },
+I have made a very simple *drag & drop* (~`11kb` *unminified*) script which uses [HTML5 native API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API) and
+it is available to download via [NPM](https://www.npmjs.com/package/@yaireo/dragsort) or [Github](https://github.com/yairEO/dragsort)
+but any other *drag & drop* script may possibly work. I could not find in the whole internet a decent lightweight script.
 
-  tag(value, tagData){
-      return `<tag title='${tagData.title || value}'
-                contenteditable='false'
-                spellcheck='false'
-                tabIndex="-1"
-                class='tagify__tag ${tagData.class ? tagData.class : ""}'
-                ${this.getAttributes(tagData)}>
-          <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-          <div>
-              <span class='tagify__tag-text'>${value}</span>
-          </div>
-      </tag>`
-  },
+### [Integration example](https://codepen.io/vsync/pen/jOqYOVJ):
 
-  dropdownItem( item ){
-    var mapValueTo = this.settings.dropdown.mapValueTo,
-        value = (mapValueTo
-            ? typeof mapValueTo == 'function'
-                ? mapValueTo(item)
-                : item[mapValueTo]
-            : item.value) || item.value,
-        sanitizedValue = (value || item).replace(/`|'/g, "&#39;");
+```js
+var tagify = new Tagify(inputElement)
 
-    return `<div ${this.getAttributes(item)}
-                class='tagify__dropdown__item ${item.class ? item.class : ""}'
-                tabindex="0"
-                role="option"
-                aria-labelledby="dropdown-label">${sanitizedValue}</div>`;
-  }
+// bind "DragSort" to Tagify's main element and tell
+// it that all the items with the below "selector" are "draggable"
+var dragsort = new DragSort(tagify.DOM.scope, {
+    selector: '.'+tagify.settings.classNames.tag,
+    callbacks: {
+        dragEnd: onDragEnd
+    }
+})
+
+// must update Tagify's value according to the re-ordered nodes in the DOM
+function onDragEnd(elm){
+    tagify.updateValueByDOMTags()
 }
 ```
-</details>
 
-## Suggestions selectbox
-The suggestions selectbox is shown is a whitelist Array of Strings or Objects was passed in the settings when the Tagify instance was created.
-Suggestions list will only be rendered if there are at least two matching sugegstions (case-insensetive).
 
-The selectbox dropdown will be appended to the document's `<body>` element and will be rendered by default in a position below (bottom of) the Tagify element.
+## DOM Templates
+It's possible to control the templates for some of the HTML elements tagify is using by
+modifying the `settings.templates` Object with your own custom functions which **must return** an *HTML string*.
+
+Available templates are: `wrapper`, `tag`, `dropdown`, `dropdownItem` and the optional `dropdownItemNoMatch`
+which is a special template for rendering a suggestion item (in the dropdown list) only if there were no matches found for the typed input.
+
+[View templates](https://github.com/yairEO/tagify/blob/master/src/parts/templates.js)
+
+### Example of overriding the `tag` template:
+
+Each template function automaticaly gets binded with `this` pointing to the current *Tagify* instance.
+It is imperative to preserve the class names and also the `this.getAttributes(tagData)` for proper functionality.
+
+```js
+new Tagify(inputElem, {
+  templates: {
+    tag(tagData, tagify){
+      return `<tag title="${(tagData.title || tagData.value)}"
+              contenteditable='false'
+              spellcheck='false'
+              tabIndex="${this.settings.a11y.focusableTags ? 0 : -1}"
+              class="${this.settings.classNames.tag} ${tagData.class ? tagData.class : ""}"
+              ${this.getAttributes(tagData)}>
+      <x title='' class="${this.settings.classNames.tagX}" role='button' aria-label='remove tag'></x>
+      <div>
+          <span class="${this.settings.classNames.tagText}">${tagData[this.settings.tagTextProp] || tagData.value}</span>
+      </div>
+    </tag>`
+  }
+})
+```
+
+## Suggestions list
+
+<p align="center">
+  <img src="/docs/suggestions-list.apng" alt='suggestions list dropdown'/>
+</p>
+
+The suggestions list is a *whitelist Array* of *Strings* or *Objects* which was set in the [settings](#settings) Object when the Tagify instance was created, and can be set latet directly on the instance: `tagifyInstance.whitelist = ["tag1", "tag2", ...]`.
+
+The suggestions dropdown will be appended to the document's `<body>` element and will be rendered by default in a position below (bottom of) the Tagify element.
 Using the keyboard arrows up/down will highlight an option from the list, and hitting the Enter key to select.
 
-It is possible to tweak the selectbox dropdown via 2 settings:
+It is possible to tweak the list dropdown via 2 settings:
 
- - enabled - this is a numeral value which tells Tagify when to show the suggestions dropdown, when a minimum of N characters were typed.
- - maxItems - Limits the number of items the suggestions selectbox will render
+ - `enabled` - this is a numeral value which tells Tagify when to show the suggestions dropdown, when a minimum of N characters were typed.
+ - `maxItems` - Limits the number of items the suggestions list will render
 
 ```javascript
 var input = document.querySelector('input'),
     tagify = new Tagify(input, {
         whitelist : ['aaa', 'aaab', 'aaabb', 'aaabc', 'aaabd', 'aaabe', 'aaac', 'aaacc'],
         dropdown : {
-            classname : "color-blue",
-            enabled   : 0,         // show the dropdown immediately on focus
-            maxItems  : 5,
-            position  : "text",    // place the dropdown near the typed text
-            closeOnSelect : false, // keep the dropdown open after selecting a suggestion
+            classname     : "color-blue",
+            enabled       : 0,              // show the dropdown immediately on focus
+            maxItems      : 5,
+            position      : "text",         // place the dropdown near the typed text
+            closeOnSelect : false,          // keep the dropdown open after selecting a suggestion
+            highlightFirst: true
         }
     });
 ```
 
-Will render:
+<p align="center"><b>Will render</b></p>
 
 ```html
-<div class="tagify__dropdown" style="left: 993.5px; top: 106.375px; width: 616px;">
-    <div class="tagify__dropdown__item" value="aaab">aaab</div>
-    <div class="tagify__dropdown__item" value="aaabb">aaabb</div>
-    <div class="tagify__dropdown__item" value="aaabc">aaabc</div>
-    <div class="tagify__dropdown__item" value="aaabd">aaabd</div>
-    <div class="tagify__dropdown__item" value="aaabe">aaabe</div>
+<div class="tagify__dropdown tagify__dropdown--text" style="left:993.5px; top:106.375px; width:616px;">
+    <div class="tagify__dropdown__wrapper">
+      <div class="tagify__dropdown__item tagify__dropdown__item--active" value="aaab">aaab</div>
+      <div class="tagify__dropdown__item" value="aaabb">aaabb</div>
+      <div class="tagify__dropdown__item" value="aaabc">aaabc</div>
+      <div class="tagify__dropdown__item" value="aaabd">aaabd</div>
+      <div class="tagify__dropdown__item" value="aaabe">aaabe</div>
+    </div>
 </div>
 ```
 
-By default searching the suggestions is using fuzzy-search (see [settings](#settings)).
+By default searching the suggestions is using [fuzzy-search](https://en.wikipedia.org/wiki/Approximate_string_matching) (see [settings](#settings)).
 
-If you wish to assign *alias* to items (in your suggestion list), add the `searchBy` property to whitelist items you wish
-to have an *alias* for. In the below example, when typing a part of string which is included in the `searchBy` property, the suggested item will
-match "Israel" will be rendered in the suggestion list selectbox.
+If you wish to assign *alias* to items (in your suggestion list), add the `searchBy` property to *whitelist* items you wish
+to have an *alias* for.
+
+In the below example, typing a part of a string which is included in the `searchBy` property, for example *`land midd"`* -
+the suggested item which match the value "Israel" will be rendered in the suggestions (dropdown) list.
 
 ### [Example](https://yaireo.github.io/tagify/#section-extra-properties) for a suggestion item alias
 
@@ -300,11 +377,16 @@ expanding the search of any typed terms to more than the `value` property of the
 ```javascript
 [
   {
-    value    : "foo",
-    nickname : "bar",
-    email    : "baz@mail.com"
+    value    : 123456,
+    nickname : "foo",
+    email    : "foo@mail.com"
   },
-  ...
+  {
+    value    : 987654,
+    nickname : "bar",
+    email    : "bar@mail.com"
+  },
+  ...more..
 ]
 ```
 
@@ -312,14 +394,24 @@ expanding the search of any typed terms to more than the `value` property of the
 ```javascript
 {
   dropdown: {
-    searchKeys: ["nickname", "email"] // "value" & "searchBy" key are searched in, regardless
+    searchKeys: ["nickname", "email"] //  fuzzy-search matching for those whitelist items' properties
   }
 }
 ```
 
 ## Mixed-Content
 
-> To use this feature it must be toggled - see [settings](#settings).
+[See demo here](https://yaireo.github.io/tagify/#section-mix)
+
+This feature must be toggled using these [settings](#settings):
+
+```js
+{
+  //  mixTagsInterpolator: ["{{", "}}"],  // optional: interpolation before & after string
+  mode: 'mix',    // <--  Enable mixed-content
+  pattern: /@|#/  // <--  Text starting with @ or # (if single, String can be used here instead of Regex)
+}
+```
 
 When mixing text with tags, the original textarea (or input) element will have a value as follows:
 
@@ -331,99 +423,125 @@ sure when the Tagify instance is initialized, that it has tags with the correct 
 the same values that appear between `[[` & `]]`.
 
 Applying the setting `dropdown.position:"text"` is encouraged for mixed-content tags, because the suggestions list
-will be rendered right next to the caret location and not the the bottom of the Tagify componenet, which might look
 weird when there is already a lot of content at multiple lines.
 
 If a tag does not exists in the *whitelist*, it may be created by the user and all you should do is listen to the `add` event and update your local/remote state.
 
 ## Single-Value
 
-Similar to native `<Select>` element, but allows typing free text as value.
+Similar to native `<Select>` element, but allows typing text as value.
 
 ## React
 
-A Tagify React component is exported as `<Tags>` from [`react.tagify.js`](https://github.com/yairEO/tagify/blob/master/dist/react.tagify.js):
+See [**live demo**](https://codesandbox.io/s/tagify-react-wrapper-oempc) for React integration examples.
+⚠️ Tagify is **not** a [controlled component](https://github.com/yairEO/tagify/issues/489#issuecomment-629316093).
+
+A Tagify React component is exported from [`react.tagify.js`](https://github.com/yairEO/tagify/blob/master/dist/react.tagify.js):
+
+---
+### Update regarding `onChange` prop:
+
+I have changed how the `onChange` works internally within the Wrapper of Tagify
+so as of *March 30, 2021* the `e` argument will include a `detail` parameter with the value as string.
+There is no more `e.target`, and to access the original DOM input element, do this: `e.detail.tagify.DOM.originalInput`.
+
+----
+
+> Note: You will need to inport Tagify's CSS also, either by javasceript or by SCSS `@import` (which is preferable)
+> Also note that you will need to use [*dart-sass*](https://www.npmjs.com/package/sass) and not *node-sass* in order to compile the file.
 
 ```javascript
 import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
+import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
+
+// on tag add/edit/remove
+const onChange = useCallback((e) => {
+  console.log("CHANGED:"
+    , e.detail.tagify.value // Array where each tag includes tagify's (needed) extra properties
+    , e.detail.tagify.getCleanValue()) // Same as above, without the extra properties
+    , e.detail.value // a string representing the tags
+  )
+}, [])
 
 const App = () => {
   return (
     <Tags
+      tagifyRef={tagifyRef} // optional Ref object for the Tagify instance itself, to get access to  inner-methods
       settings={settings}  // tagify settings object
-      value="a,b,c"
+      defaultValue="a,b,c"
       {...tagifyProps}   // dynamic props such as "loading", "showDropdown:'abc'", "value"
-      onChange={e => console.log("CHANGED:", e)}
+      onChange={onChange}
     />
   )
 })
 ```
 
-Check the [**live demo**](https://codesandbox.io/s/tagify-react-wrapper-oempc) for a React integration example.
+To gain full access to Tagify's (instance) inner methods, A custom `ref` can be used:
 
+```jsx
+...
+const tagifyRef = useRef()
+...
+<Tags tagifyRef={tagifyRef} ... />
 
-## Angular
+// or mix-mode
+<MixedTags
+  settings={...}
+  onChange={...}
+  defaultValue={`This is a textarea which mixes text with [[{"value":"tags"}]].`}
+/>
+```
 
-**TagifyComponent** which will be used by your template as `<tagify>`
+`<MixedTags>` component is a shorthand for `<Tags InputMode="textarea">`
 
+#### Updating the component's state
+
+The `settings` prop is **only used once** in the initialization process, please do not update it afterwards.
+
+---
 <details>
-  <summary>Example:</summary>
+  <summary>📖 List of (React) props for the <code>&lt;Tags/&gt;</code> component</summary>
 
-```
-<div>
-  testing tagify wrapper
-  <tagify [settings]="settings"
-          (add)="onAdd($event)"
-          (remove)="onRemove($event)">
-  </tagify>
-  <button (click)="clearTags()">clear</button>
-  <button (click)="addTags()">add Tags</button>
-</div>
-```
+
+Prop                    | Type                      | Updatable | Info
+----------------------- | ------------------------- |:---------:| -----------------------------------------------------------
+settings                | <sub>Object</sub>         |           | See [*settings* section](#settings)
+name                    | <sub>String</sub>         | ✔         | `<input>`'s element `name` attribute
+value                   | <sub>String/Array</sub>   | ✔         | Initial value.
+defaultValue            | <sub>String/Array</sub>   |           | Same as `value prop
+placeholder             | <sub>String</sub>         | ✔         | placeholder text for the component
+readOnly                | <sub>Boolean</sub>        | ✔         | Toggles `readonly` state. With capital `O`.
+tagifyRef               | <sub>Object</sub>         |           | `useRef` hook refference for the component inner instance of vailla *Tagify* (for methods access)
+showFilteredDropdown    | <sub>Boolean/String</sub> | ✔         | if `true` shows the suggestions dropdown. if assigned a String, show the dropdown pre-filtered.
+loading                 | <sub>Boolean</sub>        | ✔         | Toggles `loading` state for the whole component
+whitelist               | <sub>Array</sub>          | ✔         | Sets the `whitelist` which is the basis for the suggestions dropdown & autocomplete
+className               | <sub>String</sub>         |           | Component's optional class name to be added
+InputMode               | <sub>String</sub>         |           | `"textarea"` will create a `<textarea>` (hidden) element instead of the default `<input>` and automatically make Tagify act as [*"mix mode"*](#mixed-content)
+autoFocus               | <sub>Boolean</sub>        |           | Should the component have focus on mount. Must be unique, per-page.
+children                | <sub>String/Array</sub>   |           | `value`/`defaultValue` props are prefered
+onChange                | <sub>Function</sub>       |           | See [*events* section](#events)
+onInput                 | <sub>Function</sub>       |           | See [*events* section](#events)
+onAdd                   | <sub>Function</sub>       |           | See [*events* section](#events)
+onRemove                | <sub>Function</sub>       |           | See [*events* section](#events)
+onInvalid               | <sub>Function</sub>       |           | See [*events* section](#events)
+onClick                 | <sub>Function</sub>       |           | See [*events* section](#events)
+onKeydown               | <sub>Function</sub>       |           | See [*events* section](#events)
+onFocus                 | <sub>Function</sub>       |           | See [*events* section](#events)
+onBlur                  | <sub>Function</sub>       |           | See [*events* section](#events)
+onEditInput             | <sub>Function</sub>       |           | See [*events* section](#events)
+onEditBeforeUpdate      | <sub>Function</sub>       |           | See [*events* section](#events)
+onEditUpdated           | <sub>Function</sub>       |           | See [*events* section](#events)
+onEditStart             | <sub>Function</sub>       |           | See [*events* section](#events)
+onEditKeydown           | <sub>Function</sub>       |           | See [*events* section](#events)
+onDropdownShow          | <sub>Function</sub>       |           | See [*events* section](#events)
+onDropdownHide          | <sub>Function</sub>       |           | See [*events* section](#events)
+onDropdownSelect        | <sub>Function</sub>       |           | See [*events* section](#events)
+onDropdownScroll        | <sub>Function</sub>       |           | See [*events* section](#events)
+onDropdownNoMatch       | <sub>Function</sub>       |           | See [*events* section](#events)
+onDropdownUpdated       | <sub>Function</sub>       |           | See [*events* section](#events)
 </details>
 
-**TagifyService**
-
-> (The tagifyService is a singletone injected by angular, do not create a new instance of it)
-Remember to add `TagifyService` to your module definition.
-
-<details>
-  <summary>Example:</summary>
-
-```typescript
-import {Component, OnDestroy} from '@angular/core';
-import {TagifyService} from '@yaireo/tagify';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent implements OnDestroy {
-
-  constructor(private tagifyService: TagifyService) {}
-  public settings = { blacklist: ['fucking', 'shit']};
-
-  onAdd(tagify) {
-    console.log('added a tag', tagify);
-  }
-
-  onRemove(tags) {
-    console.log('removed a tag', tags);
-  }
-  clearTags() {
-    this.tagifyService.removeAll();
-  }
-  addTags() {
-    this.tagifyService.addTags(['this', 'is', 'cool']);
-  }
-  ngOnDestroy() {
-    this.tagifyService.destroy();
-  }
-}
-```
-</details>
-
+---
 
 
 ## jQuery version
@@ -436,8 +554,8 @@ script (non-jqueryfied) and all the jQuery's wrapper does is allowing to chain t
 ```javascript
 $('[name=tags]')
     .tagify()
-    .on('add', function(e, tagName){
-        console.log('added', tagName)
+    .on('add', function(e, tagData){
+        console.log('added', ...tagData)  // data, index, and DOM node
     });
 ```
 
@@ -449,13 +567,152 @@ $('[name=tags]').tagify();
 $('[name=tags]').data('tagify').addTags('aaa, bbb, ccc')
 ````
 
-## FAQ
+## HTML input & textarea attributes
 
-To render all the tags at the same line, without tags wrapping to new lines, add this to your `.tagify` CSS:
+The below list of *attributes* affect *Tagify*.<br>
+These can also be set by Tagify [settings](#settings) Object manually, and not *declerativly* (via attributes).
+
+Attribute         | Example                                               | Info
+----------------- | ----------------------------------------------------- | --------------------
+[pattern](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern) | <pre lang=html>`<input pattern='^[A-Za-z_✲ ]{1,15}$'>`</pre>               | Tag Regex pattern which tag input is validated by.
+[placeholder](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefplaceholder) | <pre lang=html>`<input placeholder='please type your tags'>`</pre>        | This attribute's value will be used as a constant placeholder, which is visible unless something is being typed.
+readOnly          | <pre lang=html>`<input readOnly>`</pre> | No user-interaction (add/remove/edit) allowed.
+autofocus         | <pre lang=html>`<input autofocus>`</pre> | Automatically focus the the Tagify component when the component is loaded
+required          | <pre lang=html>`<input required>`</pre> | Adds a `required` attribute to the Tagify wrapper element. Does nothing more.
+
+
+
+## FAQ
+List of questions & scenarios which might come up during development with Tagify:
+
+<details>
+  <summary><strong>Dynamic whitelist</strong></summary>
+The whitelist initial value is set like so:
+
+```javascript
+const tagify = new Tagify(tagNode, {
+  whitelist: ["a", "b", "c"]
+})
+```
+
+If changes to the whitelist are needed, they should be done like so:
+
+**Incorrect:**
+
+```js
+tagify.settings.whitelist = ["foo", "bar"]
+```
+
+**Correct:**
+```js
+// set the whitelist directly on the instance and not on the "settings" property
+tagify.whitelist = ["foo", "bar"]
+```
+</details>
+
+---
+
+<details>
+  <summary><strong>tags/whitelist data structure</strong></summary>
+
+Tagify does not accept just *any* kind of data structure.<br>
+If a tag data is represented as an `Object`, it **must** contain a **unique** property `value`
+which Tagify uses to check if a tag already exists, among other things, so make sure it is present.
+
+**Incorrect:**
+
+```javascript
+[{ "id":1, "name":"foo bar" }]
+```
+
+**Correct:**
+
+```javascript
+[{ "id":1, "value": 1, "name":"foo bar" }]
+```
+
+```javascript
+[{ "value":1, "name":"foo bar" }]
+```
+
+```javascript
+[{ "value":"foo bar" }]
+```
+
+```javascript
+// ad a simple array of Strings
+["foo bar"]
+```
+</details>
+
+---
+
+<details>
+  <summary><strong>Save changes (Ex. to a server)</strong></summary>
+
+In framework-less projects, the developer should save the state of the Tagify component (somewhere), and
+the question is:<br/>
+**when should the state be saved?**
+On every change made to *Tagify's* internal state (`tagify.value` via the `update()` method).<br>
+
+
+```javascript
+var tagify = new Tagify(...)
+
+// listen to "change" events on the "original" input/textarea element
+tagify.DOM.originalInput.addEventListener('change', onTagsChange)
+
+// This example uses async/await but you can use Promises, of course, if you prefer.
+async function onTagsChange(e){
+  const {name, value} = e.target
+  // "imaginary" async function "saveToServer" should get the field's name & value
+  await saveToServer(name, value)
+}
+```
+
+If you are using *React/Vue/Angular* or any "modern" framework, then you already know how to
+attach "onChange" event listeners to your `<input>`/`<textarea>` elements, so the above is irrelevant.
+</details>
+
+----
+
+<details>
+  <summary><strong>Render tags in one single line</strong></summary>
+
+Stopping tags from wrapping to new lines, add this to your `.tagify` *selector CSS Rule*:
 
 ```css
 flex-wrap: nowrap;
 ````
+</details>
+
+----
+
+<details>
+  <summary><strong>Submit on `Enter` key</strong></summary>
+
+Tagify internally has `state` property, per `Tagify` instance
+and this may be useful for a variety of things when implementing a specific scenario.
+
+```js
+var tagify = new Tagify(...)
+var formElm = document.forms[0]; // just an example
+
+tagify.on('keydown', onTagifyKeyDown)
+
+function onTagifyKeyDown(e){
+  if( e.key == 'Enter' &&         // "enter" key pressed
+      !tagify.state.inputText &&  // assuming user is not in the middle oy adding a tag
+      !tagify.state.editing       // user not editing a tag
+    ){
+    setTimeout(() => formElm.submit())  // put some buffer to make sure tagify has done with whatever, to be on the safe-side
+  }
+
+}
+```
+</details>
+
+---
 
 * [Double-click tag fires both "edit" & "click" custom events](https://github.com/yairEO/tagify/issues/247)
 * [Manualy open the suggestions dropdown](https://github.com/yairEO/tagify/issues/254)
@@ -463,7 +720,7 @@ flex-wrap: nowrap;
 * [Allow max length on mix mode](https://github.com/yairEO/tagify/issues/252)
 * [Always show dropdown](https://github.com/yairEO/tagify/issues/253)
 * [Limit the length of a tag value (minimum & maximum)](https://github.com/yairEO/tagify/issues/245)
-* [Mixed mode initial value](https://github.com/yairEO/tagify/issues/237)
+* [*Mixed mode* initial value](https://github.com/yairEO/tagify/issues/237)
 * [Random colors for each tag](https://github.com/yairEO/tagify/issues/223)
 * [Format input value for server side](https://github.com/yairEO/tagify/issues/220)
 * [Writing to tagify textarea](https://github.com/yairEO/tagify/issues/294)
@@ -471,18 +728,26 @@ flex-wrap: nowrap;
 * [Insert emoji at caret location when editing a tag](https://github.com/yairEO/tagify/issues/365)
 * [propagate `change` event](https://github.com/yairEO/tagify/issues/413)
 * [Manually update tag data after it was added](https://github.com/yairEO/tagify/issues/433)
+* [Ajax Whitelist with "enforceWhitelist" setting enabled](https://github.com/yairEO/tagify/issues/465)
+* [Custom (multiple) tag validation & AJAX](https://github.com/yairEO/tagify/issues/474)
+* [Make tags from pasted multi-line text](https://github.com/yairEO/tagify/issues/160)
+* [Add a tag at *caret* position in *mixed mode*](https://github.com/yairEO/tagify/issues/524#issuecomment-699140465)
 
-## CSS Variables (see [MDN docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties))
+## CSS Variables
 
-These CSS variables allow easy customization without the need to manually write CSS.
-If you do wish to heavily style your Tagify components, then you can use these variables within
-your modified styles.
+> Learn more about [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)) (custom properties)
 
-For example how this can be used, see the [demos page](https://yaireo.github.io/tagify/#section-different-look).
+Tagify's utilizes *CSS variables* which allow easy customization without the need to manually write CSS.
+If you do wish to heavily style your Tagify components, then you can (and should) use the below variables within
+your modified styles as much as you can.
+
+For a *live* example, see the [demos page](https://yaireo.github.io/tagify/#section-different-look).
 
 Name                            | Info
 ------------------------------- | --------------------------------
 --tags-border-color             | The outer border color which surrounds tagify
+--tags-hover-border-color       | *hover* state
+--tags-focus-border-color       | *focus* state
 --tag-bg                        | Tag background color
 --tag-hover                     | Tag background color on hover (mouse)
 --tag-text-color                | Tag text color
@@ -494,28 +759,53 @@ Name                            | Info
 --tag-invalid-color             | For border color of edited tags with invalid value being typed into them
 --tag-invalid-bg                | Background color for invalid Tags.
 --tag-remove-bg                 | Tag background color when hovering the `×` button.
---tag-remove-btn-bg             | The remove (`×`) button background color
---tag-remove-btn-bg--hover      | The remove (`×`) button background color on hover
+--tag-remove-btn-color          | Remove (`×`) button text color
+--tag-remove-btn-bg             | Remove (`×`) button background color
+--tag-remove-btn-bg--hover      | Remove (`×`) button hover background color
 --loader-size                   | Loading animation size. `1em` is pretty big, default is a bit less.
 --tag-hide-transition           | Controls the transition property when a tag is removed. default is '.3s'
+--placeholder-color             | Placeholder text color
+--placeholder-color-focus       | Placeholder text color when Tagify has focus and no input was typed
+--input-color                   | Input text color
+
+### Full list of Tagify's [SCSS variables](https://github.com/yairEO/tagify/blob/master/src/tagify.scss#L9-L24)
 
 
 ## Methods
 
-Name                | Parameters                               | Info
-------------------- | ---------------------------------------- | --------------------------------------------------------------------------
-destroy             |                                          | Reverts the input element back as it was before Tagify was applied
-removeAllTags       |                                          | Removes all tags and resets the original input tag's value property
-addTags             | `tagsItems`, `clearInput`, `skipInvalid` | Accepts a String (word, single or multiple with a delimiter), an Array of Objects (see above) or Strings
-removeTag           | Node/String                              | Removes a specific tag. Argument is the tag DOM element to be removed, or value. When nothing passed, removes last tag (see source code)
-loadOriginalValues  | String/Array                             | Converts the input's value into tags. This method gets called automatically when instansiating Tagify. Also works for mixed-tags
-getTagIndexByValue  | String                                   | Returns the index of a specific tag, by value
-parseMixTags        | String                                   | Converts a String argument (`[[foo]]⁠ and [[bar]]⁠ are..`) into HTML with mixed tags & texts
-getTagElms          |                                          | Returns a DOM nodes list of all the tags
-getTagElmByValue    | String                                   | Returns a specific tag DOM node by value
-editTag             | Node                                     | Goes to edit-mode in a specific tag
-replaceTag          | `tagElm`, `tagData`                      | Exit a tag's edit-mode. if "tagData" exists, replace the tag element with new data and update Tagify value
-loading             | Boolean                                  | Toogle loading state on/off (Ex. AJAX whitelist pulling)
+`Tagify` is [prototype](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes) based and There are many methods, but I've chosen to list the most relevant ones:
+
+Name                       | Parameters                                                                              | Info
+-------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------
+`destroy`                  |                                                                                         | Reverts the input element back as it was before Tagify was applied
+`removeAllTags`            |                                                                                         | Removes all tags and resets the original input tag's value property
+`addTags`                  | <ol><li>`Array`/`String`/`Object` tag(s) to add</li><li>`Boolean` clear input after adding</li><li>`Boolean` - skip adding invalids</li><ol>  | Accepts a String (word, single or multiple with a delimiter), an Array of Objects (see above) or Strings.
+`addMixTags`               | `Array`/`String`                                                                        | Bypasses the normalization process in `addTags`, forcefully adding tags at the last caret location or at the end, if there's no last caret location saved (at `tagify.state.selection`)
+`removeTags`               | <ol><li>`Array`/`HTMLElement`/`String` tag(s) to remove</li><li>`silent` does not update the component's value</li><li>`tranDuration` Transition duration (in `ms`)</li></ul> | (#502) Remove single/multiple Tags. When nothing passed, removes last tag. <ul><li>`silent` - A flag, which when turned on, does not remove any value and does not update the original input value but simply removes the tag from tagify</li><li>`tranDuration` - delay for animation, after which the tag will be removed from the DOM</li></ul>
+`addEmptyTag`              | `Object` <sub>(`tagData`)</sub>                                                         | Create an empty tag (optionally with pre-defined data) and enters "edit" mode directly. [See demo](https://yaireo.github.io/tagify#section-different-look)
+`loadOriginalValues`       | `String`/`Array`                                                                        | Converts the input's value into tags. This method gets called automatically when instansiating Tagify. Also works for mixed-tags
+`getWhitelistItemsByValue` | `Object`                                                                                | `{value}` - return an Array of found matching items (case-insensitive)
+`getTagIndexByValue`       | `String`                                                                                | Returns the index of a specific tag, by value
+`getTagElmByValue`         | `String`                                                                                | Returns the first matched tag node, if found
+`isTagDuplicate`           | `String`                                                                                | Returns how many tags already exists with that value
+`parseMixTags`             | `String`                                                                                | Converts a String argument (`[[foo]]⁠ and [[bar]]⁠ are..`) into HTML with mixed tags & texts
+`getTagElms`               |                                                                                         | Returns a DOM nodes list of all the tags
+`getTagElmByValue`         | `String`                                                                                | Returns a specific tag DOM node by value
+`tagData`                  | `HTMLElement`, `Object`                                                                 | set/get tag data on a tag element (has`.tagify__tag` class by default)
+`editTag`                  | `HTMLElement`                                                                           | Goes to edit-mode in a specific tag
+`replaceTag`               | `tagElm`, `Object` <sub>(`tagData`)</sub>                                               | Exit a tag's edit-mode. if "tagData" exists, replace the tag element with new data and update Tagify value
+`loading`                  | `Boolean`                                                                               | toggle loading state on/off (Ex. AJAX whitelist pulling)
+`tagLoading`               | `HTMLElement`, Boolean                                                                  | same as above but for a specific tag element
+`createTagElem`            | `Object` <sub>(`tagData`)</sub>                                                         | Returns a tag element from the supplied tag data
+`injectAtCaret`            | `HTMLElement` <sub>(`injectedNode`)</sub>, `Object` <sub>(`range`)</sub>                | Injects text or HTML node at last caret position. `range` parameter is *optional*
+`placeCaretAfterNode`      | `HTMLElement`                                                             | Places the caret after a given node
+`insertAfterTag`           | `HTMLElement` <sub>(tag element)</sub>, `HTMLElement`/`String` <sub>(whatever to insert after)</sub> |
+`toggleClass`              | `Boolean`                                                                               | Toggles `class` on the main *tagify* container (`scope`)
+`dropdown.selectAll`       |                                                                                         | Add **all** whitelist items as tags and close the suggestion dropdown
+`updateValueByDOMTags`     |                                                                                         | Iterate tag DOM nodes and re-build  the `tagify.value` array (call this if tags get sorted manually)
+`parseTemplate`            | `String`/`Function` <sub>(template name or function)</sub>, `Array` <sub>(data)</sub>   | converts a template string (by selecting one from the `settings.templates` by name or supplying a template function which returns a String) into a DOM node
+`setReadonly`              | `Boolean`                                                                               | Toggles "readonly" mode on/off
+`setDisabled`              | `Boolean`                                                                               | Toggles "disabled" mode on/off
 
 ## Events
 
@@ -523,25 +813,40 @@ All triggered events return the instance's scope (tagify).<br>
 See `e.detail` for custom event additional data.
 
 <details>
-  <summary>See Examples</summary>
+  <summary>Example 1</summary>
 
 ```javascript
 var tagify = new Tagify(...)
 
-// events are chainable and multiple events may be binded for the same callback
+// events can be chainable, and multiple events may be binded for the same callback
 tagify
   .on('input', e => console.log(e.detail))
   .on('edit:input edit:updated edit:start edit:keydown', e => console.log(e.type, e.detail))
 ```
 </details>
 
+<details>
+  <summary>Example 2</summary>
+
+```javascript
+var tagify = new Tagify(inputNode, {
+  callbacks: {
+    "change": (e) => console.log(e.detail))
+    "dropdown:show": (e) => console.log(e.detail))
+  }
+})
+```
+</details>
+
 Name               | Info
 ------------------ | --------------------------------------------------------------------------
+change             | Any change to the value has occured. `e.details.value` callback listener argument is a *String*
 add                | A tag has been added
-remove             | A tag has been removed ([use `removeTag`](https://github.com/yairEO/tagify/issues/222) intead with *jQuery*)
+remove             | A tag has been removed ([use `removeTag`](https://github.com/yairEO/tagify/issues/222) instead with *jQuery*)
 invalid            | A tag has been added but did not pass vaildation. See [event detail](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events)
 input              | [Input](https://developer.mozilla.org/en-US/docs/Web/Events/input) event, when a tag is being typed/edited. `e.detail` exposes `value`, `inputElm` & `isValid`
 click              | Clicking a tag. Exposes the tag element, its index & data
+dblclick           | Double-clicking a tag
 keydown            | When tagify input has focus and a key was pressed
 focus              | The component currently has focus
 blur               | The component lost focus
@@ -554,39 +859,92 @@ dropdown:show      | Suggestions dropdown is to be rendered. The dropdown DOM no
 dropdown:hide      | Suggestions dropdown has been removed from the DOM
 dropdown:select    | Suggestions dropdown item selected (by mouse/keyboard/touch)
 dropdown:scroll    | Tells the percentage scrolled. (`event.detail.percentage`)
+dropdown:noMatch   | No whitelist suggestion item matched for the the typed input. At this point it is possible to manually set `tagify.suggestedListItems` to any possible custom value, for example: `[{ value:"default" }]`
+dropdown:updated   | Fired when the dropdown list is re-filtered while suggestions list is visible and a tag was removed so it was re-added as a suggestion
+
+## Hooks
+
+**Promise**-based hooks for *async* program flow scenarios.
+
+Allows to "hook" (intervene) at certain points of the program, which were selected as a suitable place to
+**pause** the program flow and wait for further instructions on how/if to procceed.
+
+<details>
+  <summary>For example, if a developer wishes to add a (native) confirmation popup before a tag is removed (by a user action):
+</summary>
+
+```javascript
+var input = document.querySelector('input')
+var tagify = new Tagify(input,{
+    hooks: {
+        /**
+         * Removes a tag
+         * @param  {Array}  tags [Array of Objects [{node:..., data:...}, {...}, ...]]
+         */
+        beforeRemoveTag : function( tags ){
+            return new Promise((resolve, reject) => {
+                confirm("Remove " + tags[0].data.value + "?")
+                    ? resolve()
+                    : reject()
+            })
+        }
+    }
+})
+```
+</details>
 
 
-## Settings
+Name                   | Parameters                                  | Info
+---------------------- | ------------------------------------------- | --------------------------------------------------------------------------
+beforeRemoveTag        | Array <sub>(of Objects)</sub>               | [Example](https://jsbin.com/xoseyux/edit?html,js,output)
+suggestionClick        | Object <sub>(click event data)</sub>        | [Example](https://jsbin.com/tuwihuf/edit?html,js,output)
+beforePaste            | `tagify`, `pastedText`, `clipboardData`     | Before pasted text was added to Tagify. *Resolve* with new paste value if needed
 
-Name                    | Type             | Default                          | Info
------------------------ | ---------------- | -------------------------------- | --------------------------------------------------------------------------
-placeholder             | String           |                                  | Placeholder text. If this attribute is set on an input/textarea element it will override this setting
-delimiters              | String           | `,`                              | [regex string] split tags by any of these delimiters. Example: `",|`  |."`
-pattern                 | String           | null                             | Validate input by REGEX pattern (can also be applied on the input itself as an attribute) Ex: `/[1-9]/`
-mode                    | String           | null                             | Use `select` for single-value dropdown-like select box. See `mix` as value to allow mixed-content. The 'pattern' setting must be set to some character.
-mixTagsInterpolator     | Array            | `['[[', ']]']`                   | Interpolation for mix mode. Everything between these will become a tag
-mixTagsAllowedAfter     | Regex            | `/,|\.|\:|\s/`                   | Define conditions in which typed mix-tags content is allowing a tag to be created after.
-duplicates              | Boolean          | false                            | Should duplicate tags be allowed or not
-enforceWhitelist        | Boolean          | false                            | Should ONLY use tags allowed in whitelist.<br>In `mix-mode`, setting it  to `false` will not allow creating new tags.
-autoComplete.enabled    | Boolean          | true                             | Tries to suggest the input's value while typing (match from whitelist) by adding the rest of term as grayed-out text
-autoComplete.rightKey   | Boolean          | false                            | If `true`, when <kbd>→</kdb> is pressed, use the suggested value to create a tag, else just auto-completes the input. In mixed-mode this is ignored and treated as "true"
-whitelist               | Array            | []                               | An array of tags which only they are allowed
-blacklist               | Array            | []                               | An array of tags which aren't allowed
-addTagOnBlur            | Boolean          | true                             | Automatically adds the text which was inputed as a tag when blur event happens
-callbacks               | Object           | {}                               | Exposed callbacks object to be triggered on events: `'add'` / `'remove'` tags
-maxTags                 | Number           | Infinity                         | Maximum number of allowed tags. when reached, adds a class "tagify--hasMaxTags" to `<Tags>`
-editTags                | Number           | 2                                | Number of clicks on a tag to enter "edit" mode. Only `1` or `2` work. `false` or `null` will disallow editing
-templates               | Object           | `wrapper`, `tag`, `dropdownItem` | Object consisting of functions which return template strings
-transformTag            | Function         | undefined                        | Takes a tag input as argument and returns a transformed value
-keepInvalidTags         | Boolean          | false                            | If `true`, do not remove tags which did not pass validation
-skipInvalid             | Boolean          | false                            | If `true`, do not add invalid, temporary, tags before automatically removing them
-backspace               | *                | true                             | On pressing backspace key:<br> `true` - remove last tag <br>`edit` - edit last tag
-dropdown.enabled        | Number           | 2                                | Minimum characters to input to show the suggestions list. "false" to disable
-dropdown.maxItems       | Number           | 10                               | Maximum items to show in the suggestions list dropdown
-dropdown.classname      | String           | `""`                             | Custom class name for the dropdown suggestions selectbox
-dropdown.fuzzySearch    | Boolean          | true                             | Enables filtering dropdown items values' by string *containing* and not only *beginning*
-dropdown.position       | String           | null                             | <ul><li>`manual` - will not render the dropdown, and you would need to do it yourself. [See demo](https://yaireo.github.io/tagify/#section-manual-suggestions)</li><li>`text` - will place the dropdown next to the caret</li><li>`all` - normal, full-width design</li></ul>
-dropdown.highlightFirst | Boolean          | false                            | When a suggestions list is shown, highlight the first item, and also suggest it in the input (The suggestion can be accepted with <kbd>→</kbd> key)
-dropdown.closeOnSelect  | Boolean          | true                             | close the dropdown after selecting an item, if `enabled:0` is set (which means always show dropdown on focus)
-dropdown.mapValueTo     | Function/String  |                                  | if whitelist is an Array of Objects:<br>Ex. `[{value:'foo', email:'foo@a.com'},...]`)<br> this setting controlls which data <em>key</em> will be printed in the dropdown.<br> Ex. `mapValueTo: data => "To:" + data.email`<br>Ex. `mapValueTo: "email"`
-dropdown.searchKeys     | Array            | `["value", "searchBy"]`          | When a user types something and trying to match the whitelist items for suggestions, this setting allows matching other keys of a whitelist objects
+## [Settings](https://github.com/yairEO/tagify/blob/master/src/parts/defaults.js#L1)
+
+Name                      | Type                         | Default                                     | Info
+------------------------- | ---------------------------- | ------------------------------------------- | --------------------------------------------------------------------------
+tagTextProp               | <sub>String</sub>            | `"value"`                                   | Tag data Object property which will be displayed as the tag's text. Remember to keep "value" property <em>unique</em>.
+placeholder               | <sub>String</sub>            |                                             | Placeholder text. If this attribute is set on an input/textarea element it will override this setting
+delimiters                | <sub>String</sub>            | `","`                                       | [RegEx **string**] split tags by any of these delimiters. Example delimeters: ",&#124;.&#124; " (*comma*, *dot* or *whitespace*)
+pattern                   | <sub>String/RegEx</sub>      | null                                        | Validate input by RegEx pattern (can also be applied on the input itself as an attribute) Ex: `/[1-9]/`
+mode                      | <sub>String</sub>            | null                                        | Use `select` for single-value dropdown-like select box. See `mix` as value to allow mixed-content. The 'pattern' setting must be set to some character.
+mixTagsInterpolator       | <sub>Array</sub>             | <sub>`['[[', ']]']`</sub>                   | Interpolation for mix mode. Everything between these will become a tag
+mixTagsAllowedAfter       | <sub>RegEx</sub>             | <sub>`/,\|\.\|\:\|\s/`</sub>                | Define conditions in which typed mix-tags content is allowing a tag to be created after.
+duplicates                | <sub>Boolean</sub>           | false                                       | Should duplicate tags be allowed or not
+trim                      | <sub>Boolean</sub>           | true                                        | If `true` trim the tag's value (remove before/after whitespaces)
+enforceWhitelist          | <sub>Boolean</sub>           | false                                       | Should ONLY use tags allowed in whitelist.<br>In `mix-mode`, setting it  to `false` will not allow creating new tags.
+autoComplete.enabled      | <sub>Boolean</sub>           | true                                        | Tries to suggest the input's value while typing (match from whitelist) by adding the rest of term as grayed-out text
+autoComplete.rightKey     | <sub>Boolean</sub>           | false                                       | If `true`, when `→` is pressed, use the suggested value to create a tag, else just auto-completes the input. In mixed-mode this is ignored and treated as "true"
+whitelist                 | <sub>Array</sub>             | []                                          | An array of allowed tags (*Strings* or *Objects*). When using *Objects* in the *whitelist* array a `value` property is a must & should be unique. <br/>Also, the *whitelist used for auto-completion when `autoCompletion.enabled` is `true`
+blacklist                 | <sub>Array</sub>             | []                                          | An array of tags which aren't allowed
+addTagOnBlur              | <sub>Boolean</sub>           | true                                        | Automatically adds the text which was inputed as a tag when blur event happens
+pasteAsTags               | <sub>Boolean</sub>           | true                                        | Automatically converts pasted text into tags
+callbacks                 | <sub>Object</sub>            | {}                                          | Exposed callbacks object to be triggered on events: `'add'` / `'remove'` tags
+maxTags                   | <sub>Number</sub>            | Infinity                                    | Maximum number of allowed tags. when reached, adds a class "tagify--hasMaxTags" to `<Tags>`
+editTags                  | <sub>Object/Number</sub>     | {}                                          | `false` or `null` will disallow editing
+editTags.*clicks*         | <sub>Number</sub>            | 2                                           | Number of clicks to enter "edit-mode": 1 for single click. Any other value is considered as double-click
+editTags.*keepInvalid*    | <sub>Boolean</sub>           | true                                        | keeps invalid edits as-is until `esc` is pressed while in focus
+templates                 | <sub>Object</sub>            | <sub>`wrapper`, `tag`, `dropdownItem`</sub> | Object consisting of functions which return template strings
+validate                  | <sub>Function</sub>          |                                             | If the `pattern` setting does not meet your needs, use this function, which recieves *tag data object* as an argument and should return `true` if validaiton passed or `false`/`string` of not. A *string* may be returned as the reason of the validation failure.
+transformTag              | <sub>Function</sub>          |                                             | Takes a tag data as argument and allows mutating it before a tag is created or edited.<br>Should not `return` anything, only **mutate**.
+keepInvalidTags           | <sub>Boolean</sub>           | false                                       | If `true`, do not remove tags which did not pass validation
+skipInvalid               | <sub>Boolean</sub>           | false                                       | If `true`, do not add invalid, temporary, tags before automatically removing them
+backspace                 | <sub>*</sub>                 | true                                        | On pressing backspace key:<br> `true` - remove last tag <br>`edit` - edit last tag<br>`false` - do nothing (useful for outside style)
+originalInputValueFormat  | <sub>Function</sub>          |                                             | If you wish your original input/textarea `value` property format to other than the default (which I recommend keeping) you may use this and make sure it returns a *string*.
+mixMode.*insertAfterTag*  | <sub>Node/String</sub>       | `\u00A0`                                    | `node` or `string` to add after a tag added |
+a11y.*focusableTags*      | <sub>Boolean</sub>           | false                                       | allows tags to get focus, and also to be deleted via <kbd>Backspace</kbd>
+dropdown.*enabled*        | <sub>Number</sub>            | 2                                           | Minimum characters input for showing a suggestions list. `false` will not render a suggestions list.
+dropdown.*caseSensitive*  | <sub>Boolean</sub>           | false                                       | if `true`, match **exact** item when a suggestion is selected (from the dropdown) and also more strict matching for dulpicate items. **Ensure** `fuzzySearch` is `false` for this to work.
+dropdown.*maxItems*       | <sub>Number</sub>            | 10                                          | Maximum items to show in the suggestions list
+dropdown.*classname*      | <sub>String</sub>            | `""`                                        | Custom *classname* for the dropdown suggestions list
+dropdown.*fuzzySearch*    | <sub>Boolean</sub>           | true                                        | Enables filtering dropdown items values' by string *containing* and not only *beginning*
+dropdown.*accentedSearch* | <sub>Boolean</sub>           | true                                        | Enable searching for <em>accented</em> items in the whitelist without typing exact match (#491)
+dropdown.*position*       | <sub>String</sub>            | `"all"`                                     | <ul><li>`manual` - will not render the dropdown, and you would need to do it yourself. [See demo](https://yaireo.github.io/tagify/#section-manual-suggestions)</li><li>`text` - places the dropdown next to the caret</li><li>`input` - places the dropdown next to the input (useful in rare situations)</li><li>`all` - normal, full-width design</li></ul>
+dropdown.*highlightFirst* | <sub>Boolean</sub>           | false                                       | When a suggestions list is shown, highlight the first item, and also suggest it in the input (The suggestion can be accepted with <kbd>→</kbd> key)
+dropdown.*closeOnSelect*  | <sub>Boolean</sub>           | true                                        | close the dropdown after selecting an item, if `enabled:0` is set (which means always show dropdown on focus)
+dropdown.*clearOnSelect*  | <sub>Boolean</sub>           | true                                        | Keep typed text after selecting a suggestion
+dropdown.*mapValueTo*     | <sub>Function/String</sub>   |                                             | If whitelist is an Array of Objects:<br>Ex. `[{value:'foo', email:'foo@a.com'},...]`)<br> this setting controlls which data <em>key</em> will be printed in the dropdown.<br> Ex.1: `mapValueTo: data => "To:" + data.email`<br>Ex.2: `mapValueTo: "email"`
+dropdown.*searchKeys*     | <sub>Array</sub>             | <sub>`["value", "searchBy"]`</sub>          | When a user types something and trying to match the whitelist items for suggestions, this setting allows matching other keys of a whitelist objects
+dropdown.*appendTarget*   | <sub>HTMLNode</sub>          | `document.body`                             | Target-Node which the *suggestions dropdown* is appended to (*only when rendered*)
+dropdown.*placeAbove*     | <sub>Boolean</sub>           |                                             | If defined, will force the placement of the dropdown in respect to the Boolean value: `true` will always show the suggestions dropdown above the input field and `false` will always show it below. By default this setting it not defined and the placement of the dropdown is automatically decided according to the space availble, where opening it *below* the input is preferred.

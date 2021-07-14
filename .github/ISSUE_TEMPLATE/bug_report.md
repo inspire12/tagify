@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Not working as expected
+about: "⚠️ Please make a DEMO page if possible"
 title: ''
 labels: ''
 assignees: ''
@@ -9,15 +9,17 @@ assignees: ''
 
 ## Prerequisites
 
-- [ ] I am running the latest version
+- [x] I am running the latest version
 - [ ] I checked the documentation and found no answer
 - [ ] I checked to make sure that this issue has not already been filed
 
-### Demo Page
-<!--- JSBIN bug template -->
-<!--- If possible, clone & modify the below template to reproduce your issue -->
-https://jsbin.com/degobup/edit?html,js,output
+### 💥 Demo Page
+<!--- JSBIN issue template -->
+<!--- ❗ If possible, clone & modify the below template to reproduce your issue -->
+https://jsbin.com/jekuqap/edit?html,js,output
 
+***React*** issue template:
+https://codesandbox.io/s/tagify-react-issue-template-4ub1r?file=/src/index.js
 
 ### Explanation
 
