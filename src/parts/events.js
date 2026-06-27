@@ -637,7 +637,8 @@ export default {
                 matchDelimiters,
                 tagsElems = this.getTagElms(),
                 fragment = document.createDocumentFragment(),
-                range = window.getSelection().getRangeAt(0),
+                selection = window.getSelection(),
+                range = selection.rangeCount ? selection.getRangeAt(0) : null,
                 remainingTagsValues = [].map.call(tagsElems, node => getSetTagData(node).value);
 
             // Android Chrome "keydown" event argument does not report the correct "key".
@@ -659,7 +660,7 @@ export default {
                     fragment.appendChild( this.createTagElem(item) )
             })
 
-            if( fragment.childNodes.length ){
+            if( fragment.childNodes.length && range ){
                 range.insertNode(fragment)
                 this.setRangeAtStartEnd(false, fragment.lastChild)
             }
