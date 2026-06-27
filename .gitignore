@@ -70,3 +70,5 @@ Temporary Items
 .vscode/virtualTab.json
 .cursor/commands
 .cursor/plans
+.repowise
+.mcp.json
