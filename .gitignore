@@ -68,3 +68,4 @@ Temporary Items
 
 # user files
 .vscode/virtualTab.json
+.cursor/commands

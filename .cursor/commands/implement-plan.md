@@ -1,1 +1,0 @@
-implement plan and at each step summon a critic which reviews if the work at that stage was done correctly. fix if needed and continue. No need to run any "yarn" commands.
