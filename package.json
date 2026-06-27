@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "gulp --dev",
-    "build": "gulp",
+    "build": "gulp build",
     "version": "gulp build && git add .",
     "prepublishOnly": "pjv",
     "test": "pnpm exec playwright test",
@@ -74,10 +74,10 @@
     "react-dom": "*"
   },
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.61.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/stream": "^3.0.1",
-    "@swc/core": "^1.15.21",
+    "@swc/core": "^1.15.43",
     "@types/node": "^22.19.17",
     "beepbeep": "^1.3.0",
     "gulp": "^5.0.1",
@@ -107,7 +107,7 @@
     "path": "^0.12.7",
     "rollup": "2.80.0",
     "rollup-plugin-banner2": "^1.3.1",
-    "rollup-plugin-swc3": "^0.11.2",
+    "rollup-plugin-swc3": "^0.12.1",
     "run-sequence": "^2.2.1",
     "sass": "^1.74.1",
     "semver": "^7.7.4",
