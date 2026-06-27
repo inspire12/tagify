@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     path = require('path'),
     buffer = require('vinyl-buffer'),
     rollupStream = require("@rollup/stream"),
+    browserslist = require('browserslist'),
     pkg = require('./package.json'),
     sass = require('gulp-sass')(require('sass')),
     opts = process.argv.reduce((result, item) => {
@@ -24,6 +25,9 @@ var rollupCache = {};
 
 const swcOptions = {
     sourceMaps: true,
+    env: {
+        targets: browserslist(),
+    },
     jsc: {
         parser: {
             syntax: 'ecmascript',
@@ -78,7 +82,7 @@ function scss(){
             sass().on('error', sass.logError)
         )
         // .pipe($.combineMq()) // combine media queries
-        .pipe($.autoprefixer({ overrideBrowserslist:['> 5%'] }) )
+        .pipe($.autoprefixer({ overrideBrowserslist: pkg.browserslist }) )
         .pipe($.cleanCss())
         .pipe(gulp.dest('./dist'))
 }

@@ -89,7 +89,6 @@
 Place these lines before any other code which is (or will be) using *Tagify* ([Example here](https://jsbin.com/jekuqap/edit?html))
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 ```
 
@@ -170,7 +169,7 @@ var tagify = new Tagify(...)
 * Has built-in CSS loader, if needed (Ex. <em>AJAX</em> whitelist pulling)
 * Tags can be trimmed via `hellip` by giving `max-width` to the `tag` element in your `CSS`
 * RTL alignment ([See demo](https://yaireo.github.io/tagify/#section-rtl))
-* <del>Internet Explorer - A polyfill script should be used: `tagify.polyfills.min.js` (in `/dist`)</del> ***(IE support has been dropped)***
+* Modern evergreen browsers only — see `browserslist` in [`package.json`](package.json) (Internet Explorer is not supported)
 * Many useful custom [events](#events)
 * Original input/textarea element values kept in sync with Tagify
 
@@ -196,7 +195,7 @@ Filename                             | Info
 ------------------------------------ | -----------------------------------------------------------
 `tagify.esm.js`                      | ESM version. [see jsbin demo](https://jsbin.com/sulijap/edit?html,output)
 `tagify.js`                          | *minified* UMD version, including its sourcemaps. This is the **main** file the package exports.
-`tagify.polyfills.min.js`            | Used for old Internet Explorer browser support
+`tagify.polyfills.min.js`            | Legacy bundle; **not required** — Internet Explorer is no longer supported
 `react.tagify.js`                    | Wrapper-only for React. [Read more](#react)
 <del>`jQuery.tagify.min.js`</del>    | jQuery wrapper - same as `tagify.js`. Might be removed in the future. **(Deprecated as of APR 24')**
 `tagify.css`                         |
